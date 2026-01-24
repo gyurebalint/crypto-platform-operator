@@ -1,0 +1,12 @@
+apiVersion: database.crypto.com/v1alpha1
+kind: CryptoDatabase
+metadata:
+  labels:
+    app.kubernetes.io/name: cryptodatabase
+    app.kubernetes.io/instance: cryptodatabase-sample
+    app.kubernetes.io/part-of: crypto-platform-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: crypto-platform-operator
+  name: cryptodatabase-sample
+spec:
+  # TODO(user): Add fields here

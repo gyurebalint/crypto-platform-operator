@@ -1,0 +1,20 @@
+gyurebalint@Odin:~$ cd ~/crypto-platform-operator
+gyurebalint@Odin:~/crypto-platform-operator$ cat <<EOF | kubectl apply -f -
+apiVersion: database.crypto.com/v1alpha1
+kind: CryptoDatabase
+metadata:
+  name: my-crypto-db
+spec:
+  storageSize: "2Gi"
+EOF
+cryptodatabase.database.crypto.com/my-crypto-db created
+gyurebalint@Odin:~/crypto-platform-operator$ kubectl get statefulsets
+NAME           READY   AGE
+my-crypto-db   1/1     41s
+gyurebalint@Odin:~/crypto-platform-operator$ kubectl get services
+NAME           TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+kubernetes     ClusterIP   10.96.0.1      <none>        443/TCP    5m13s
+my-crypto-db   ClusterIP   10.96.93.169   <none>        5432/TCP   49s
+gyurebalint@Odin:~/crypto-platform-operator$ kubectl get pods
+NAME             READY   STATUS    RESTARTS   AGE
+my-crypto-db-0   1/1     Running   0          56s
