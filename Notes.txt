@@ -18,3 +18,14 @@ my-crypto-db   ClusterIP   10.96.93.169   <none>        5432/TCP   49s
 gyurebalint@Odin:~/crypto-platform-operator$ kubectl get pods
 NAME             READY   STATUS    RESTARTS   AGE
 my-crypto-db-0   1/1     Running   0          56s
+
+
+1) ASKED FOR A RESOURCE LIKE THIS:
+cat <<EOF | kubectl apply -f -
+apiVersion: database.crypto.com/v1alpha1
+kind: CryptoDatabase
+metadata:
+  name: my-crypto-db
+spec:
+  storageSize: "2Gi"
+EOF
