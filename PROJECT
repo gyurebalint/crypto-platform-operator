@@ -5,6 +5,7 @@
 domain: crypto.com
 layout:
 - go.kubebuilder.io/v4
+multigroup: true
 plugins:
   manifests.sdk.operatorframework.io/v2: {}
   scorecard.sdk.operatorframework.io/v2: {}
@@ -28,5 +29,14 @@ resources:
   group: database
   kind: CryptoCache
   path: github.com/gyurebalint/crypto-platform-operator/api/v1alpha1
+  version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: crypto.com
+  group: app
+  kind: CryptoTracker
+  path: github.com/gyurebalint/crypto-platform-operator/api/app/v1alpha1
   version: v1alpha1
 version: "3"

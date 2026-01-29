@@ -2,4 +2,5 @@
 resources:
 - database_v1alpha1_cryptodatabase.yaml
 - database_v1alpha1_cryptocache.yaml
+- app_v1alpha1_cryptotracker.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

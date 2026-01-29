@@ -29,3 +29,99 @@ metadata:
 spec:
   storageSize: "2Gi"
 EOF
+
+
+make manifests
+make install
+make run
+
+
+cat <<EOF | kubectl apply -f -
+apiVersion: app.crypto.com/v1alpha1
+kind: CryptoTracker
+metadata:
+  name: my-tracker
+spec:
+  image: "gyurebalint/crypto-aggregator:latest"
+  symbol: "BTC"
+  db: "my-crypto-db"     # Must match the DB name we created
+  cache: "my-redis"      # Must match the Cache name we created
+EOF
+
+# Delete the service
+kubectl delete service my-tracker
+
+# Watch it reappear (The Operator should recreate it immediately)
+kubectl get services -w
+
+kubectl get svc my-tracker -o wide
+kubectl port-forward service/my-tracker 3000:80
+
+
+
+FROM SCRATCH:
+cd ~/crypto-platform-operator
+kind create cluster --name crypto-platform
+
+make install
+make run
+
+
+INFRA DB
+cat <<EOF | kubectl apply -f -
+apiVersion: database.crypto.com/v1alpha1
+kind: CryptoDatabase
+metadata:
+  name: my-crypto-db
+spec:
+  storageSize: "2Gi"
+EOF
+
+INFRA CACHE
+cat <<EOF | kubectl apply -f -
+apiVersion: database.crypto.com/v1alpha1
+kind: CryptoCache
+metadata:
+  name: my-redis
+spec:
+  memory: "256Mi"
+EOF
+
+DEPLOY AN APP
+cat <<EOF | kubectl apply -f -
+apiVersion: app.crypto.com/v1alpha1
+kind: CryptoTracker
+metadata:
+  name: my-tracker-2
+spec:
+  image: "gyurebalint/crypto-aggregator:latest"
+  symbol: "TAO"       # Change this to BTC, ETH, SOL, etc.
+  db: "my-crypto-db"  # Must match the DB name above
+  cache: "my-redis"   # Must match the Cache name above
+EOF
+
+TEST
+kubectl get pods
+kubectl port-forward service/my-tracker 3000:80
+
+
+http://localhost:3000/price
+Refresh: Refresh the page 2-3 times to trigger the "Cache HIT" logs in Terminal 1/2.
+
+http://localhost:3000/price?symbol=ETH
+
+DEBUGGING
+See App Logs
+kubectl logs -f -l app=crypto-tracker
+
+kubectl delete pod -l app=crypto-tracker )forces restart/pull
+
+CHECK REDIS KEYS
+kubectl exec -it $(kubectl get pod -l app=crypto-cache -o jsonpath="{.items[0].metadata.name}") -- redis-cli KEYS "*"
+
+CHECK SQL DATA
+kubectl exec -it my-crypto-db-0 -- psql -U user -d crypto
+\dt
+SELECT * FROM prices;
+SELECT * FROM prices WHERE currency = 'TAO';
+\q

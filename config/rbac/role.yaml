@@ -5,6 +5,32 @@ metadata:
   name: manager-role
 rules:
 - apiGroups:
+  - app.crypto.com
+  resources:
+  - cryptotrackers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - app.crypto.com
+  resources:
+  - cryptotrackers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - app.crypto.com
+  resources:
+  - cryptotrackers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - apps
   resources:
   - deployments

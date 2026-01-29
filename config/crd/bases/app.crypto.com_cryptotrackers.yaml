@@ -1,0 +1,63 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: (devel)
+  name: cryptotrackers.app.crypto.com
+spec:
+  group: app.crypto.com
+  names:
+    kind: CryptoTracker
+    listKind: CryptoTrackerList
+    plural: cryptotrackers
+    singular: cryptotracker
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: CryptoTracker is the Schema for the cryptotrackers API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: CryptoTrackerSpec defines the desired state of CryptoTracker
+            properties:
+              cache:
+                description: Cache is the name of the CryptoCache to connect to (Optional)
+                type: string
+              db:
+                description: DB is the name of the CryptoDatabase to connect to (Optional)
+                type: string
+              image:
+                type: string
+              symbol:
+                type: string
+            required:
+            - image
+            - symbol
+            type: object
+          status:
+            description: CryptoTrackerStatus defines the observed state of CryptoTracker
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

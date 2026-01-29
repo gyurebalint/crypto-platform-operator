@@ -1,0 +1,27 @@
+# permissions for end users to view cryptotrackers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: cryptotracker-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: crypto-platform-operator
+    app.kubernetes.io/part-of: crypto-platform-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: cryptotracker-viewer-role
+rules:
+- apiGroups:
+  - app.crypto.com
+  resources:
+  - cryptotrackers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - app.crypto.com
+  resources:
+  - cryptotrackers/status
+  verbs:
+  - get
